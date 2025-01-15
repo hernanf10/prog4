@@ -26,7 +26,8 @@ gunicorn
 #generar imagen docker
 docker build -t django-container .
 
-#correr docker mysql-container se monta el volumen mysql en la raiz del proyecto para mantener la persistencia
+## correr docker mysql-container se monta el volumen mysql en la raiz del proyecto para mantener la persistencia
+
 docker run --rm -d --name mysql-container --network deploy1 -e TZ=America/Argentina/Buenos_Aires -e MYSQL_ROOT_PASSWORD=hernanf10 -e MYSQL_DATABASE=app -e MYSQL_USER=user -e MYSQL_PASSWORD=hernanf10 -v "$PWD"/mysql:/var/lib/mysql mysql:8.0-debian --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
 #crear proyecto - se ejecuta la primera vez
