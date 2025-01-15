@@ -30,20 +30,25 @@ docker build -t django-container .
 
 docker run --rm -d --name mysql-container --network deploy1 -e TZ=America/Argentina/Buenos_Aires -e MYSQL_ROOT_PASSWORD=hernanf10 -e MYSQL_DATABASE=app -e MYSQL_USER=user -e MYSQL_PASSWORD=hernanf10 -v "$PWD"/mysql:/var/lib/mysql mysql:8.0-debian --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
-#crear proyecto - se ejecuta la primera vez
+## crear proyecto - se ejecuta la primera vez
 docker run --rm --name django-container --network deploy1 --link mysql-container:mysql -p 8000:8000 -it -v "$PWD":/app django-container django-admin startproject proyectos
-#crear app - se ejecuta la primera vez
+
+## crear app - se ejecuta la primera vez
+
 docker run --rm --name django-container --network deploy1 --link mysql-container:mysql -p 8000:8000 -it -v "$PWD"/proyectos:/app django-container python manage.py startapp servicios
-#correr docker django-container
+
+## correr docker django-container
+
 docker run --rm --name django-container --network deploy1 --link mysql-container:mysql -p 8000:8000 -d -v "$PWD"/proyectos:/app django-container
 
-#correr docker adminer
+## correr docker adminer
 docker run --rm -it -d --name adminer --network deploy1 -p 9000:8080 adminer:latest
 
-#correr docker nginx 
+## correr docker nginx 
+
 docker run --rm --name nginx-container --network deploy1 -d -p 80:80 -v "$PWD/nginx.conf:/etc/nginx/conf.d/default.conf" -v "$PWD/proyectos/staticfiles:/app/staticfiles" nginx
 
-#archivo nginx.conf en la raiz del proyecto
+## archivo nginx.conf en la raiz del proyecto
 server {
     listen 80;
     server_name 192.168.100.251;  # dominio o IP
@@ -61,7 +66,8 @@ server {
     }
 }
 
-#generar el siguiente modelo de datos
+## generar el siguiente modelo de datos
+
 1. Diagrama Entidad-Relación (DER)
 Usuarios
 ---------
@@ -97,7 +103,7 @@ Calificaciones
 - calificacion (1-5)
 - comentario
 
-#conectar mysqlclient
+## conectar mysqlclient
 con datos de la base mysql
 
 en setting.py
@@ -112,17 +118,17 @@ DATABASES = {
     }
 }
 
-#migraciones
+## migraciones
 docker exec -it django-container python manage.py makemigrations
 docker exec -it django-container python manage.py migrate
 
 
-#INSTALLED_APPS settings.py
+## INSTALLED_APPS settings.py
  servicios
  djangorestframework
  drf-yasg
  
-#generar api para crud de las entidades
-#generar doc swager/openapi
-#habilitar admin django para la aplicacion
+## generar api para crud de las entidades
+## generar doc swager/openapi
+## habilitar admin django para la aplicacion
 en admin.py
