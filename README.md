@@ -1,29 +1,31 @@
-#directorio de trabajo
+## directorio de trabajo
 	/scrum
-#Dockerfile para generar django-container
-# Usar una imagen base de Python
+# #Dockerfile para generar django-container
+- Usar una imagen base de Python
 FROM python:3.9
-# Establecer el directorio de trabajo
+- Establecer el directorio de trabajo
 WORKDIR /app
-# Copiar los archivos de requisitos
+- Copiar los archivos de requisitos
 COPY requirements.txt .
-# Instalar las dependencias
+- Instalar las dependencias
 RUN pip install --no-cache-dir -r requirements.txt
-# Copiar el resto de la aplicación
+- Copiar el resto de la aplicación
 COPY . .
-# Exponer el puerto que usará la aplicación
+- Exponer el puerto que usará la aplicación
 EXPOSE 8000
-# Comando para ejecutar la aplicación con Gunicorn
+- Comando para ejecutar la aplicación con Gunicorn
 CMD ["gunicorn", "proyectos.wsgi:application", "--bind", "0.0.0.0:8000"]
 
-#requirements.txt 
+## requirements.txt 
+
 Django>=3.2,<4.0
 djangorestframework
 mysqlclient
 drf-yasg
 gunicorn
 
-#generar imagen docker
+## generar imagen docker
+
 docker build -t django-container .
 
 ## correr docker mysql-container se monta el volumen mysql en la raiz del proyecto para mantener la persistencia
